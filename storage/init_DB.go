@@ -3,6 +3,7 @@ package storage
 import (
 	"avito/config"
 	"database/sql"
+	_ "github.com/lib/pq"
 	"log"
 )
 

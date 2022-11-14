@@ -3,17 +3,18 @@ package user_balance
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 )
 
-type userBalance struct {
-	id      int
-	balance int
+type UserBalance struct {
+	Id      int
+	Balance int
 }
 
-func userBalanceInsert(db *sql.DB, ub userBalance) error {
+func UserBalanceInsert(db *sql.DB, ub UserBalance) error {
 	_, err := db.Exec(
-		"INSERT INTO user_balance (id, balance) VALUES ($1, $2 )", ub.id, ub.balance)
+		"INSERT INTO user_balance (id, balance) VALUES ($1, $2 )", ub.Id, ub.Balance)
 	if err != nil {
 		log.Println("insert problem", err)
 		return err
@@ -21,15 +22,15 @@ func userBalanceInsert(db *sql.DB, ub userBalance) error {
 	return nil
 }
 
-func userBalanceSelect(db *sql.DB) error {
+func UserBalanceSelect(db *sql.DB) error {
 	rows, err := db.Query("SELECT * from user_balance")
 	if err != nil {
 		log.Println("zapros err", err)
 	}
-	var items []userBalance
+	var items []UserBalance
 	for rows.Next() {
-		ub := userBalance{}
-		err = rows.Scan(&ub.id, &ub.balance)
+		ub := UserBalance{}
+		err = rows.Scan(&ub.Id, &ub.Balance)
 		if err != nil {
 			log.Println("scan problem", err)
 			return err

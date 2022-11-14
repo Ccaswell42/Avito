@@ -1,4 +1,4 @@
-package reserve_account
+package accounting_report
 
 import (
 	"database/sql"
@@ -7,17 +7,16 @@ import (
 	"log"
 )
 
-type ReverseAcc struct {
-	Id      int
-	Service int
-	OrderId int
-	Cost    int
+type ReportAcc struct {
+	Service   int
+	Cost      int
+	OrderDate string
 }
 
-func ReverseAccInsert(db *sql.DB, ra ReverseAcc) error {
+func ReportAccInsert(db *sql.DB, ra ReportAcc) error {
 	_, err := db.Exec(
-		"INSERT INTO reserve_account (id, service, order_id, cost) VALUES ($1, $2, $3, $4 )",
-		ra.Id, ra.Service, ra.OrderId, ra.Cost)
+		"INSERT INTO accounting_report (service, cost, order_date) VALUES ($1, $2, $3)",
+		ra.Service, ra.Cost, ra.OrderDate)
 	if err != nil {
 		log.Println("insert problem", err)
 		return err
@@ -25,15 +24,15 @@ func ReverseAccInsert(db *sql.DB, ra ReverseAcc) error {
 	return nil
 }
 
-func ReverseAccSelect(db *sql.DB) error {
-	rows, err := db.Query("SELECT * from reserve_account")
+func ReportAccSelect(db *sql.DB) error {
+	rows, err := db.Query("SELECT * from accounting_report")
 	if err != nil {
 		log.Println("zapros err", err)
 	}
-	var items []ReverseAcc
+	var items []ReportAcc
 	for rows.Next() {
-		ra := ReverseAcc{}
-		err = rows.Scan(&ra.Id, &ra.Service, &ra.OrderId, &ra.Cost)
+		ra := ReportAcc{}
+		err = rows.Scan(&ra.Service, &ra.Cost, &ra.OrderDate)
 		if err != nil {
 			log.Println("scan problem", err)
 			return err
