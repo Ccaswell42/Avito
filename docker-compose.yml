@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:14.4
+    environment:
+      POSTGRES_DB: "avito"
+      POSTGRES_PASSWORD: "qwerty"
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    ports:
+      - "5436:5432"
