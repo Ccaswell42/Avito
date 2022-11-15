@@ -16,6 +16,10 @@ type ErrResponse struct {
 	Error interface{} `json:"Error"`
 }
 
+type ResultResponse struct {
+	Result interface{} `json:"Result"`
+}
+
 func JsonResponse(ok bool, w http.ResponseWriter, data interface{}, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)

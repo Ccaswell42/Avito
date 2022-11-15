@@ -60,3 +60,15 @@ func (ub *UserBalance) GetBalance(db *sql.DB) (UserBalance, error) {
 	ub.Balance = resp.Balance
 	return resp, nil
 }
+
+//func (ub *UserBalance) ReplenishBalance(db *sql.DB) error {
+//	newUB, err := ub.GetBalance(db)
+//	if err != nil && err != sql.ErrNoRows{
+//		log.Println("getbalance err///:", err)
+//		return err
+//	}
+//
+//
+//
+//	return nil
+//}
