@@ -8,8 +8,8 @@ import (
 )
 
 type UserBalance struct {
-	Id      int
-	Balance int
+	Id      int `json:"Id,omitempty"`
+	Balance int `json:"Balance,omitempty"`
 }
 
 func UserBalanceInsert(db *sql.DB, ub UserBalance) error {
@@ -46,5 +46,17 @@ func UserBalanceSelect(db *sql.DB) error {
 		fmt.Println(val)
 	}
 	return nil
+}
 
+func (ub *UserBalance) GetBalance(db *sql.DB) (UserBalance, error) {
+	var resp UserBalance
+	row := db.QueryRow("SELECT balance FROM user_balance WHERE id = $1", ub.Id)
+
+	err := row.Scan(&resp.Balance)
+	if err != nil {
+		log.Println("scan////:", err)
+		return resp, err
+	}
+	ub.Balance = resp.Balance
+	return resp, nil
 }

@@ -1,9 +1,9 @@
 CREATE TABLE user_balance (
-                              id int NOT NULL,
+                              id int NOT NULL UNIQUE,
                               balance int
 );
 CREATE TABLE reserve_account (
-                                 id int NOT NULL,
+                                 id int NOT NULL UNIQUE,
                                  service int NOT NULL,
                                  order_id int NOT NULL,
                                  cost int
