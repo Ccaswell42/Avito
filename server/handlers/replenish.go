@@ -26,7 +26,7 @@ func (d *Data) Replenish(w http.ResponseWriter, r *http.Request) {
 		log.Println(contentType)
 		return
 	}
-	err = user_balance.UserBalanceInsert(d.DB, bal)
+	err = user_balance.ReplenishBalance(d.DB, bal)
 	if err != nil {
 		JsonResponse(false, w, "can't replenish the balance", http.StatusInternalServerError)
 		log.Println(err)

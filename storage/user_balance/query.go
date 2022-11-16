@@ -22,6 +22,16 @@ func UserBalanceInsert(db *sql.DB, ub UserBalance) error {
 	return nil
 }
 
+func UserBalanceUpdate(db *sql.DB, ub UserBalance) error {
+	_, err := db.Exec(
+		"UPDATE user_balance SET balance = $1", ub.Balance)
+	if err != nil {
+		log.Println("update problem", err)
+		return err
+	}
+	return nil
+}
+
 func UserBalanceSelect(db *sql.DB) error {
 	rows, err := db.Query("SELECT * from user_balance")
 	if err != nil {
@@ -48,7 +58,7 @@ func UserBalanceSelect(db *sql.DB) error {
 	return nil
 }
 
-func (ub *UserBalance) GetBalance(db *sql.DB) (UserBalance, error) {
+func GetBalance(db *sql.DB, ub UserBalance) (UserBalance, error) {
 	var resp UserBalance
 	row := db.QueryRow("SELECT balance FROM user_balance WHERE id = $1", ub.Id)
 
@@ -57,18 +67,26 @@ func (ub *UserBalance) GetBalance(db *sql.DB) (UserBalance, error) {
 		log.Println("scan////:", err)
 		return resp, err
 	}
-	ub.Balance = resp.Balance
 	return resp, nil
 }
 
-//func (ub *UserBalance) ReplenishBalance(db *sql.DB) error {
-//	newUB, err := ub.GetBalance(db)
-//	if err != nil && err != sql.ErrNoRows{
-//		log.Println("getbalance err///:", err)
-//		return err
-//	}
-//
-//
-//
-//	return nil
-//}
+func ReplenishBalance(db *sql.DB, ub UserBalance) error {
+	newUB, err := GetBalance(db, ub)
+	if err != nil && err != sql.ErrNoRows {
+		log.Println("getbalance err///:", err)
+		return err
+	}
+	if err == sql.ErrNoRows {
+		err = UserBalanceInsert(db, ub)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	newUB.Balance += ub.Balance
+	err = UserBalanceUpdate(db, newUB)
+	if err != nil {
+		return err
+	}
+	return nil
+}

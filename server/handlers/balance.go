@@ -59,7 +59,7 @@ func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {
 		log.Println(contentType)
 		return
 	}
-	ub, err := bal.GetBalance(d.DB)
+	ub, err := user_balance.GetBalance(d.DB, bal)
 	if err != nil {
 		JsonResponse(false, w, "no such user_id", http.StatusOK)
 		log.Println(err)
