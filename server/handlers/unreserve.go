@@ -2,13 +2,12 @@ package handlers
 
 import (
 	"avito/storage/reserve_account"
-	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
 )
 
-func (d *Data) Reserve(w http.ResponseWriter, r *http.Request) {
+func (d *Data) UnReserve(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		JsonResponse(false, w, "invalid method", http.StatusMethodNotAllowed)
 		return
@@ -27,17 +26,12 @@ func (d *Data) Reserve(w http.ResponseWriter, r *http.Request) {
 		log.Println(contentType)
 		return
 	}
-
-	err = reserve_account.ReserveMoney(d.DB, ra)
+	err = reserve_account.UnReserveMoney(d.DB, ra)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			JsonResponse(false, w, "can't reserve money: no such user", http.StatusBadRequest)
-		} else {
-			str := err.Error()
-			JsonResponse(false, w, "can't reserve money: "+str, http.StatusInternalServerError)
-		}
+		JsonResponse(false, w, "can't unreserve money", http.StatusInternalServerError)
 		log.Println(err)
 		return
 	}
-	JsonResponse(true, w, "reserve OK", http.StatusOK)
+	JsonResponse(true, w, "money successfully unreserved", http.StatusOK)
+
 }

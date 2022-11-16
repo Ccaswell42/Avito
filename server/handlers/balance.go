@@ -4,6 +4,7 @@ import (
 	"avito/storage/user_balance"
 	"database/sql"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 )
@@ -12,58 +13,37 @@ type Data struct {
 	DB *sql.DB
 }
 
-type ErrResponse struct {
-	Error interface{} `json:"Error"`
-}
-
-type ResultResponse struct {
-	Result interface{} `json:"Result"`
-}
-
-func JsonResponse(ok bool, w http.ResponseWriter, data interface{}, statusCode int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	if !ok {
-		errResp := ErrResponse{data}
-		err := json.NewEncoder(w).Encode(errResp)
-		if err != nil {
-			log.Println("encode error", err)
-			http.Error(w, "encode error", 500)
-		}
-	} else {
-		err := json.NewEncoder(w).Encode(data)
-		if err != nil {
-			log.Println("encode error", err)
-			http.Error(w, "encode error", 500)
-		}
-	}
-}
-
 func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		JsonResponse(false, w, "invalid method", http.StatusMethodNotAllowed)
+
+	errStr := ValidateRequest(r, w, http.MethodGet)
+	if errStr != OK {
 		return
 	}
 
-	var bal user_balance.UserBalance
-	err := json.NewDecoder(r.Body).Decode(&bal)
-
-	if err != nil {
-		JsonResponse(false, w, "no request body", http.StatusBadRequest)
-		log.Println(err)
-		return
-	}
-	contentType := r.Header.Get("Content-Type")
-	if contentType != "application/json" {
-		JsonResponse(false, w, "content-type is not application/json", http.StatusUnsupportedMediaType)
-		log.Println(contentType)
+	bal, errStr := ValidateBodyUserBalance(r.Body)
+	if errStr != OK {
+		JsonResponse2(ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
 	ub, err := user_balance.GetBalance(d.DB, bal)
 	if err != nil {
-		JsonResponse(false, w, "no such user_id", http.StatusOK)
+		JsonResponse2(ResponseError, w, "no such user_id", http.StatusOK)
 		log.Println(err)
 		return
 	}
-	JsonResponse(true, w, ub, http.StatusOK)
+	JsonResponse2(UB, w, ub, http.StatusOK)
+}
+
+func ValidateBodyUserBalance(r io.Reader) (user_balance.UserBalance, string) {
+	var ub user_balance.UserBalance
+	err := json.NewDecoder(r).Decode(&ub)
+
+	if err != nil {
+		log.Println(err)
+		return ub, err.Error()
+	}
+	if ub.Id == 0 {
+		return ub, UserBalanceZeroValue
+	}
+	return ub, OK
 }

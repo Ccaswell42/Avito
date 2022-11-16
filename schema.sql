@@ -5,7 +5,7 @@ CREATE TABLE user_balance (
 CREATE TABLE reserve_account (
                                  id int NOT NULL,
                                  service int NOT NULL,
-                                 order_id int NOT NULL,
+                                 order_id int NOT NULL UNIQUE ,
                                  cost int
 );
 CREATE TABLE accounting_report (
