@@ -1,17 +1,19 @@
 package reserve_account
 
 import (
+	"avito/storage/user_balance"
 	"database/sql"
+	"errors"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
 )
 
 type ReverseAcc struct {
-	Id      int
-	Service int
-	OrderId int
-	Cost    int
+	Id      int `json:"Id"`
+	Service int `json:"Service"`
+	OrderId int `json:"OrderId"`
+	Cost    int `json:"Cost"`
 }
 
 func ReverseAccInsert(db *sql.DB, ra ReverseAcc) error {
@@ -47,6 +49,29 @@ func ReverseAccSelect(db *sql.DB) error {
 	}
 	for _, val := range items {
 		fmt.Println(val)
+	}
+	return nil
+}
+
+func ReserveMoney(db *sql.DB, ra ReverseAcc) error {
+	ub := user_balance.UserBalance{Id: ra.Id, Balance: ra.Cost}
+
+	newUb, err := user_balance.GetBalance(db, ub)
+	if err != nil {
+		return err
+	}
+	if newUb.Balance < ub.Balance {
+		return errors.New("not enough money")
+	}
+	newUb.Balance -= ub.Balance
+
+	err = user_balance.UserBalanceUpdate(db, newUb)
+	if err != nil {
+		return err
+	}
+	err = ReverseAccInsert(db, ra)
+	if err != nil {
+		return err
 	}
 	return nil
 }

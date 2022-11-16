@@ -3,7 +3,7 @@ CREATE TABLE user_balance (
                               balance int
 );
 CREATE TABLE reserve_account (
-                                 id int NOT NULL UNIQUE,
+                                 id int NOT NULL,
                                  service int NOT NULL,
                                  order_id int NOT NULL,
                                  cost int
