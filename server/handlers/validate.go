@@ -14,6 +14,7 @@ const (
 	UserBalanceZeroValue string = "no user_id or user_id is nul"
 	UB                   string = "userBalance"
 	ReserveZeroValue     string = "request does not contain all fields or null values"
+	ReportZeroValue      string = "no month or year specified"
 )
 
 type ErrResponse struct {
@@ -37,25 +38,6 @@ func ValidateRequest(r *http.Request, w http.ResponseWriter, method string) stri
 	}
 	return OK
 }
-
-//func JsonResponse(ok bool, w http.ResponseWriter, data interface{}, statusCode int) {
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(statusCode)
-//	if !ok {
-//		errResp := ErrResponse{data}
-//		err := json.NewEncoder(w).Encode(errResp)
-//		if err != nil {
-//			log.Println("encode error", err)
-//			http.Error(w, "encode error", 500)
-//		}
-//	} else {
-//		err := json.NewEncoder(w).Encode(data)
-//		if err != nil {
-//			log.Println("encode error", err)
-//			http.Error(w, "encode error", 500)
-//		}
-//	}
-//}
 
 func JsonResponse(ok string, w http.ResponseWriter, data interface{}, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")

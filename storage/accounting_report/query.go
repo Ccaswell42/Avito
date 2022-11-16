@@ -10,9 +10,9 @@ import (
 )
 
 type ReportAcc struct {
-	Service   int
-	Cost      int
-	OrderDate string
+	Service   int    `json:"Service"`
+	Cost      int    `json:"Cost"`
+	OrderDate string `json:"OrderDate"`
 }
 
 func ReportAccInsert(db *sql.DB, ra ReportAcc) error {
@@ -52,6 +52,11 @@ func ReportAccSelect(db *sql.DB) error {
 	return nil
 }
 
+func RepAccSelect(db *sql.DB) error {
+
+	return nil
+}
+
 func Revenue(db *sql.DB, ra reserve_account.ReverseAcc) error {
 	_, err := reserve_account.ReserveAccSelect(db, ra)
 	if err != nil {
@@ -69,3 +74,8 @@ func Revenue(db *sql.DB, ra reserve_account.ReverseAcc) error {
 	}
 	return nil
 }
+
+//func GetReportCsv(db *sql.DB, dateRep handlers.DateReport) error {
+//
+//	return nil
+//}
