@@ -33,17 +33,17 @@ func (d *Data) Replenish(w http.ResponseWriter, r *http.Request) {
 
 	bal, errStr := ValidateBodyUserBalance(r.Body)
 	if errStr != OK {
-		JsonResponse2(ResponseError, w, errStr, http.StatusOK)
+		JsonResponse(ResponseError, w, errStr, http.StatusOK)
 		return
 	}
 
 	err := user_balance.ReplenishBalance(d.DB, bal)
 	if err != nil {
-		JsonResponse2(ResponseError, w, "can't replenish the balance", http.StatusInternalServerError)
+		JsonResponse(ResponseError, w, "can't replenish the balance", http.StatusInternalServerError)
 		//JsonResponse(false, w, "can't replenish the balance", http.StatusInternalServerError)
 		log.Println(err)
 		return
 	}
-	JsonResponse2(OK, w, "balance successfully replenished", http.StatusOK)
+	JsonResponse(OK, w, "balance successfully replenished", http.StatusOK)
 	//JsonResponse(true, w, "balance successfully replenished", http.StatusOK)
 }

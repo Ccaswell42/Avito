@@ -17,6 +17,7 @@ func LaunchServer(conf *config.Config, srv *http.Server, db *sql.DB) error {
 	mux.HandleFunc("/replenish", d.Replenish)
 	mux.HandleFunc("/reserve", d.Reserve)
 	mux.HandleFunc("/unreserve", d.UnReserve)
+	mux.HandleFunc("/revenue", d.Revenue)
 
 	srv.Addr = conf.Port
 	srv.Handler = mux

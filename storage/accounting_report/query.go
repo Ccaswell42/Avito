@@ -1,10 +1,12 @@
 package accounting_report
 
 import (
+	"avito/storage/reserve_account"
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
+	"time"
 )
 
 type ReportAcc struct {
@@ -46,6 +48,24 @@ func ReportAccSelect(db *sql.DB) error {
 	}
 	for _, val := range items {
 		fmt.Println(val)
+	}
+	return nil
+}
+
+func Revenue(db *sql.DB, ra reserve_account.ReverseAcc) error {
+	_, err := reserve_account.ReserveAccSelect(db, ra)
+	if err != nil {
+		return err
+	}
+	err = reserve_account.DeleteRow(db, ra)
+	if err != nil {
+		return err
+	}
+	date := time.Now().Format("01-02-2006")
+	repAcc := ReportAcc{Service: ra.Service, Cost: ra.Cost, OrderDate: date}
+	err = ReportAccInsert(db, repAcc)
+	if err != nil {
+		return err
 	}
 	return nil
 }

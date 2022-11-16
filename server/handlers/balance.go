@@ -22,16 +22,16 @@ func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {
 
 	bal, errStr := ValidateBodyUserBalance(r.Body)
 	if errStr != OK {
-		JsonResponse2(ResponseError, w, errStr, http.StatusBadRequest)
+		JsonResponse(ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
 	ub, err := user_balance.GetBalance(d.DB, bal)
 	if err != nil {
-		JsonResponse2(ResponseError, w, "no such user_id", http.StatusOK)
+		JsonResponse(ResponseError, w, "no such user_id", http.StatusOK)
 		log.Println(err)
 		return
 	}
-	JsonResponse2(UB, w, ub, http.StatusOK)
+	JsonResponse(UB, w, ub, http.StatusOK)
 }
 
 func ValidateBodyUserBalance(r io.Reader) (user_balance.UserBalance, string) {

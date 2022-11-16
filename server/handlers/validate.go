@@ -26,38 +26,38 @@ type ResultResponse struct {
 
 func ValidateRequest(r *http.Request, w http.ResponseWriter, method string) string {
 	if r.Method != method {
-		JsonResponse2(ResponseError, w, MethodNotAllowed, http.StatusMethodNotAllowed)
+		JsonResponse(ResponseError, w, MethodNotAllowed, http.StatusMethodNotAllowed)
 		return MethodNotAllowed
 	}
 	contentType := r.Header.Get("Content-Type")
 	if contentType != "application/json" {
-		JsonResponse2(ResponseError, w, UnsupportedMediaType, http.StatusUnsupportedMediaType)
+		JsonResponse(ResponseError, w, UnsupportedMediaType, http.StatusUnsupportedMediaType)
 		log.Println(contentType)
 		return UnsupportedMediaType
 	}
 	return OK
 }
 
-func JsonResponse(ok bool, w http.ResponseWriter, data interface{}, statusCode int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	if !ok {
-		errResp := ErrResponse{data}
-		err := json.NewEncoder(w).Encode(errResp)
-		if err != nil {
-			log.Println("encode error", err)
-			http.Error(w, "encode error", 500)
-		}
-	} else {
-		err := json.NewEncoder(w).Encode(data)
-		if err != nil {
-			log.Println("encode error", err)
-			http.Error(w, "encode error", 500)
-		}
-	}
-}
+//func JsonResponse(ok bool, w http.ResponseWriter, data interface{}, statusCode int) {
+//	w.Header().Set("Content-Type", "application/json")
+//	w.WriteHeader(statusCode)
+//	if !ok {
+//		errResp := ErrResponse{data}
+//		err := json.NewEncoder(w).Encode(errResp)
+//		if err != nil {
+//			log.Println("encode error", err)
+//			http.Error(w, "encode error", 500)
+//		}
+//	} else {
+//		err := json.NewEncoder(w).Encode(data)
+//		if err != nil {
+//			log.Println("encode error", err)
+//			http.Error(w, "encode error", 500)
+//		}
+//	}
+//}
 
-func JsonResponse2(ok string, w http.ResponseWriter, data interface{}, statusCode int) {
+func JsonResponse(ok string, w http.ResponseWriter, data interface{}, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	switch ok {

@@ -19,26 +19,26 @@ func (d *Data) Reserve(w http.ResponseWriter, r *http.Request) {
 
 	ra, errStr := ValidateBodyReserve(r.Body)
 	if errStr != OK {
-		JsonResponse2(ResponseError, w, errStr, http.StatusBadRequest)
+		JsonResponse(ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
 
 	err := reserve_account.ReserveMoney(d.DB, ra)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			JsonResponse2(ResponseError, w, "can't reserve money: no such user", http.StatusBadRequest)
+			JsonResponse(ResponseError, w, "can't reserve money: no such user", http.StatusBadRequest)
 		} else if strings.HasPrefix(err.Error(), "pq: duplicate key value") {
-			JsonResponse2(ResponseError, w, "can't reserve money: order_id must be unique", http.StatusBadRequest)
+			JsonResponse(ResponseError, w, "can't reserve money: order_id must be unique", http.StatusBadRequest)
 		} else if strings.HasPrefix(err.Error(), "pq: null value in column") {
-			JsonResponse2(ResponseError, w, "can't reserve money: not all request fields are specified", http.StatusBadRequest)
+			JsonResponse(ResponseError, w, "can't reserve money: not all request fields are specified", http.StatusBadRequest)
 		} else {
 			str := err.Error()
-			JsonResponse2(ResponseError, w, "can't reserve money: "+str, http.StatusInternalServerError)
+			JsonResponse(ResponseError, w, "can't reserve money: "+str, http.StatusInternalServerError)
 		}
 		log.Println(err)
 		return
 	}
-	JsonResponse2(OK, w, "reserve OK", http.StatusOK)
+	JsonResponse(OK, w, "reserve OK", http.StatusOK)
 }
 
 func ValidateBodyReserve(r io.Reader) (reserve_account.ReverseAcc, string) {
