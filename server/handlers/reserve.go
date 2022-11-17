@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"avito/logic"
 	"avito/storage/reserve_account"
 	"database/sql"
 	"encoding/json"
@@ -12,33 +13,34 @@ import (
 
 func (d *Data) Reserve(w http.ResponseWriter, r *http.Request) {
 
-	errStr := ValidateRequest(r, w, http.MethodPost)
-	if errStr != OK {
+	errStr := logic.ValidateRequest(r, w, http.MethodPost)
+	if errStr != logic.OK {
 		return
 	}
 
 	ra, errStr := ValidateBodyReserve(r.Body)
-	if errStr != OK {
-		JsonResponse(ResponseError, w, errStr, http.StatusBadRequest)
+	if errStr != logic.OK {
+		logic.JsonResponse(logic.ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
 
-	err := reserve_account.ReserveMoney(d.DB, ra)
+	err := logic.ReserveMoney(d.DB, ra)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			JsonResponse(ResponseError, w, "can't reserve money: no such user", http.StatusBadRequest)
+			logic.JsonResponse(logic.ResponseError, w, "can't reserve money: no such user", http.StatusBadRequest)
 		} else if strings.HasPrefix(err.Error(), "pq: duplicate key value") {
-			JsonResponse(ResponseError, w, "can't reserve money: order_id must be unique", http.StatusBadRequest)
+			logic.JsonResponse(logic.ResponseError, w, "can't reserve money: order_id must be unique", http.StatusBadRequest)
 		} else if strings.HasPrefix(err.Error(), "pq: null value in column") {
-			JsonResponse(ResponseError, w, "can't reserve money: not all request fields are specified", http.StatusBadRequest)
+			logic.JsonResponse(logic.ResponseError, w, "can't reserve money: not all request fields are specified",
+				http.StatusBadRequest)
 		} else {
 			str := err.Error()
-			JsonResponse(ResponseError, w, "can't reserve money: "+str, http.StatusInternalServerError)
+			logic.JsonResponse(logic.ResponseError, w, "can't reserve money: "+str, http.StatusInternalServerError)
 		}
 		log.Println(err)
 		return
 	}
-	JsonResponse(OK, w, "reserve OK", http.StatusOK)
+	logic.JsonResponse(logic.OK, w, "reserve OK", http.StatusOK)
 }
 
 func ValidateBodyReserve(r io.Reader) (reserve_account.ReverseAcc, string) {
@@ -50,7 +52,7 @@ func ValidateBodyReserve(r io.Reader) (reserve_account.ReverseAcc, string) {
 		return ra, err.Error()
 	}
 	if ra.Id == 0 || ra.Service == 0 || ra.Cost == 0 || ra.OrderId == 0 {
-		return ra, ReserveZeroValue
+		return ra, logic.ReserveZeroValue
 	}
-	return ra, OK
+	return ra, logic.OK
 }

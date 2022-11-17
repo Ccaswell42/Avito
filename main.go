@@ -4,16 +4,18 @@ import (
 	"avito/config"
 	"avito/server"
 	"avito/storage"
-	"avito/storage/user_balance"
+	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
 
-	//rep := accounting_report.ReportAcc{Service: 13, Cost: 1000, OrderDate: "Jan-08-1999"}
-	//revers := reserve_account.ReverseAcc{Id: 1, Service: 12, OrderId: 22, Cost: 3500}
-	ub := user_balance.UserBalance{Id: 31, Balance: 30000}
 	conf, err := config.GetConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -22,9 +24,26 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	user_balance.UserBalanceInsert(db, ub)
-	user_balance.UserBalanceSelect(db)
-	//accounting_report.ReportAccSelect(db)
+
 	srv := &http.Server{}
-	server.LaunchServer(conf, srv, db)
+
+	go func() {
+		err := server.LaunchServer(conf, srv, db)
+		if err != http.ErrServerClosed {
+			log.Fatal(err)
+		}
+		fmt.Println("server completed successfully")
+	}()
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+	closeCtx, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancel()
+
+	err = srv.Shutdown(closeCtx)
+	if err != nil {
+		log.Println("fail shutdown:", err)
+	}
+	log.Println("Shutdown completed successfully")
 }
