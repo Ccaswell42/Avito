@@ -18,7 +18,10 @@ func LaunchServer(conf *config.Config, srv *http.Server, db *sql.DB) error {
 	mux.HandleFunc("/reserve", d.Reserve)
 	mux.HandleFunc("/unreserve", d.UnReserve)
 	mux.HandleFunc("/revenue", d.Revenue)
-
+	mux.HandleFunc("/report", d.Report)
+	//mux.Handle("/", http.FileServer(http.Dir("./server")))
+	//http.Handle("/", http.FileServer(http.Dir(".")))
+	//go http.ListenAndServe(":8083", nil)
 	srv.Addr = conf.Port
 	srv.Handler = mux
 	srv.ReadTimeout = 10 * time.Second

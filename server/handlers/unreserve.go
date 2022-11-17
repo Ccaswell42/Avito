@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"avito/storage/reserve_account"
+	"database/sql"
 	"log"
 	"net/http"
 )
@@ -20,7 +21,12 @@ func (d *Data) UnReserve(w http.ResponseWriter, r *http.Request) {
 
 	err := reserve_account.UnReserveMoney(d.DB, ra)
 	if err != nil {
-		JsonResponse(ResponseError, w, "can't unreserve money: "+err.Error(), http.StatusInternalServerError)
+		if err == sql.ErrNoRows {
+			JsonResponse(ResponseError, w, "can't unreserve money: no such note", http.StatusBadRequest)
+		} else {
+			JsonResponse(ResponseError, w, "can't unreserve money: "+err.Error(), http.StatusInternalServerError)
+		}
+
 		log.Println(err)
 		return
 	}
