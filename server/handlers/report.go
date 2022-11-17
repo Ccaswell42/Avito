@@ -20,13 +20,14 @@ func (d *Data) Report(w http.ResponseWriter, r *http.Request) {
 		JsonResponse(ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
-	err := accounting_report.GetReportCsv(d.DB, dateRep)
+	fileName, err := accounting_report.GetReportCsv(d.DB, dateRep)
 	if err != nil {
-		JsonResponse(ResponseError, w, err.Error(), http.StatusBadRequest)
+		JsonResponse(ResponseError, w, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
 		return
 	}
-	JsonResponse(OK, w, "тестим", http.StatusOK)
+
+	JsonResponse(OK, w, fileName, http.StatusOK)
 
 }
 

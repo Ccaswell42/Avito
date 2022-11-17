@@ -3,9 +3,14 @@ package accounting_report
 import (
 	"avito/storage/reserve_account"
 	"database/sql"
+	"encoding/csv"
+	"errors"
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
+	"os"
+	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -80,20 +85,44 @@ func Revenue(db *sql.DB, ra reserve_account.ReverseAcc) error {
 	return nil
 }
 
-func GetReportCsv(db *sql.DB, dateRep DateReport) error {
+func GetReportCsv(db *sql.DB, dateRep DateReport) (string, error) {
 
+	var fileName string
 	items, err := SelectReport(db, dateRep)
 	if err != nil {
-		return err
+		return fileName, err
 	}
 	csvMap := make(map[int]int)
 	for _, value := range items {
 		csvMap[value.Service] += value.Cost
 	}
-	fmt.Println("/////////CSVMAP:")
-	fmt.Println(csvMap)
 
-	return nil
+	csvFile, err := os.Create("data.csv")
+
+	if err != nil {
+		return fileName, err
+	}
+	csvWriter := csv.NewWriter(csvFile)
+	csvWriter.Comma = ';'
+	err = csvWriter.Write([]string{"название услуги", "общая сумма выручки за отчетный период"})
+	for key, value := range csvMap {
+		keyStr := strconv.Itoa(key)
+		valueStr := strconv.Itoa(value)
+		fmt.Println(keyStr, valueStr)
+		err = csvWriter.Write([]string{keyStr, valueStr})
+		if err != nil {
+			return fileName, errors.New("can't write data in csv-file")
+		}
+	}
+	fileName, err = filepath.Abs(csvFile.Name())
+	if err != nil {
+		return fileName, err
+	}
+	csvWriter.Flush()
+	if csvWriter.Error() != nil {
+		return fileName, err
+	}
+	return fileName, nil
 }
 
 func SelectReport(db *sql.DB, dateRep DateReport) ([]ReportAcc, error) {
@@ -120,9 +149,9 @@ func SelectReport(db *sql.DB, dateRep DateReport) ([]ReportAcc, error) {
 		log.Println("close problem", err)
 		return items, err
 	}
-	for _, val := range items {
-		fmt.Println(val)
-	}
+	//for _, val := range items {
+	//	fmt.Println(val)
+	//}
 
 	return items, nil
 }

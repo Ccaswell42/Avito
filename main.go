@@ -4,7 +4,6 @@ import (
 	"avito/config"
 	"avito/server"
 	"avito/storage"
-	"avito/storage/accounting_report"
 	"avito/storage/user_balance"
 	"log"
 	"net/http"
@@ -25,7 +24,7 @@ func main() {
 	}
 	user_balance.UserBalanceInsert(db, ub)
 	user_balance.UserBalanceSelect(db)
-	accounting_report.ReportAccSelect(db)
+	//accounting_report.ReportAccSelect(db)
 	srv := &http.Server{}
 	server.LaunchServer(conf, srv, db)
 }
