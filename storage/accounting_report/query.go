@@ -9,14 +9,13 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"os"
-	"path/filepath"
 	"strconv"
 	"time"
 )
 
 type ReportAcc struct {
 	Service   int    `json:"Service"`
-	Cost      int    `json:"Cost"`
+	Cost      uint   `json:"Cost"`
 	OrderDate string `json:"OrderDate"`
 }
 
@@ -89,16 +88,18 @@ func GetReportCsv(db *sql.DB, dateRep DateReport) (string, error) {
 
 	var fileName string
 	items, err := SelectReport(db, dateRep)
+	if len(items) == 0 {
+		return fileName, errors.New("no entries in the report")
+	}
 	if err != nil {
 		return fileName, err
 	}
-	csvMap := make(map[int]int)
+	csvMap := make(map[int]uint)
 	for _, value := range items {
 		csvMap[value.Service] += value.Cost
 	}
 
 	csvFile, err := os.Create("data.csv")
-
 	if err != nil {
 		return fileName, err
 	}
@@ -107,17 +108,14 @@ func GetReportCsv(db *sql.DB, dateRep DateReport) (string, error) {
 	err = csvWriter.Write([]string{"название услуги", "общая сумма выручки за отчетный период"})
 	for key, value := range csvMap {
 		keyStr := strconv.Itoa(key)
-		valueStr := strconv.Itoa(value)
+		valueStr := strconv.FormatUint(uint64(value), 10)
 		fmt.Println(keyStr, valueStr)
 		err = csvWriter.Write([]string{keyStr, valueStr})
 		if err != nil {
 			return fileName, errors.New("can't write data in csv-file")
 		}
 	}
-	fileName, err = filepath.Abs(csvFile.Name())
-	if err != nil {
-		return fileName, err
-	}
+	fileName = csvFile.Name()
 	csvWriter.Flush()
 	if csvWriter.Error() != nil {
 		return fileName, err
@@ -131,7 +129,7 @@ func SelectReport(db *sql.DB, dateRep DateReport) ([]ReportAcc, error) {
 		"AND EXTRACT(YEAR from order_date) = $2",
 		dateRep.Month, dateRep.Year)
 	if err != nil {
-		log.Println("zapros err", err)
+		log.Println("query err", err)
 		return items, err
 	}
 

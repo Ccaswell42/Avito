@@ -8,8 +8,8 @@ import (
 )
 
 type UserBalance struct {
-	Id      int `json:"Id,omitempty"`
-	Balance int `json:"Balance,omitempty"`
+	Id      int  `json:"Id,omitempty"`
+	Balance uint `json:"Balance,omitempty"`
 }
 
 func UserBalanceInsert(db *sql.DB, ub UserBalance) error {

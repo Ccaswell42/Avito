@@ -10,10 +10,10 @@ import (
 )
 
 type ReverseAcc struct {
-	Id      int `json:"Id"`
-	Service int `json:"Service"`
-	OrderId int `json:"OrderId"`
-	Cost    int `json:"Cost"`
+	Id      int  `json:"Id"`
+	Service int  `json:"Service"`
+	OrderId int  `json:"OrderId"`
+	Cost    uint `json:"Cost"`
 }
 
 func ReverseAccInsert(db *sql.DB, ra ReverseAcc) error {

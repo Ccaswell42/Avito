@@ -10,7 +10,8 @@ import (
 )
 
 type Data struct {
-	DB *sql.DB
+	DB   *sql.DB
+	Port string
 }
 
 func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {

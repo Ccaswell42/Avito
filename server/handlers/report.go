@@ -26,8 +26,7 @@ func (d *Data) Report(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-
-	JsonResponse(OK, w, fileName, http.StatusOK)
+	JsonResponse(OK, w, "./"+fileName, http.StatusOK)
 
 }
 
