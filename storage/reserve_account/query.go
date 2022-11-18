@@ -2,7 +2,6 @@ package reserve_account
 
 import (
 	"database/sql"
-	"fmt"
 	_ "github.com/lib/pq"
 	"log"
 )
@@ -34,7 +33,6 @@ func ReserveAccSelect(db *sql.DB, ra ReverseAcc) (ReverseAcc, error) {
 		ra.Id, ra.Service, ra.OrderId, ra.Cost)
 
 	err := row.Scan(&newRa.Id, &newRa.Service, &newRa.OrderId, &newRa.Cost)
-	fmt.Println(newRa)
 	if err != nil {
 		log.Println("scan error: ", err)
 		return newRa, err
