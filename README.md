@@ -32,3 +32,10 @@ Response:
 ![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp2.png)
 Response:
 ![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp3.png)
+## Unreserve:
+Request:
+![unreserve_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/unreserve_req.png)
+Response:
+![unreserve_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/unreserve_resp.png)
+Response:
+![unreserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/unreserve_badresp.png)
