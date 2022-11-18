@@ -39,3 +39,14 @@ Response:
 ![unreserve_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/unreserve_resp.png)
 Response:
 ![unreserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/unreserve_badresp.png)
+## Revenue:
+Request:
+![revenue_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/revenue_req.png)
+Response:
+![revenue_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/revenue_resp.png)
+## Report:
+Request:
+![report_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_req.png)
+Response:
+![report_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_resp.png)
+![report_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_badresp.png)
