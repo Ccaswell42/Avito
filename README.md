@@ -13,4 +13,8 @@ make
 Request:
 ![balance_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/balance_req.png)
 Response:
-
+![balance_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/balance_resp.png)
+## Replenish:
+![replenish_request] (https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_req.png)
+![replenish_response] (https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_resp.png)
+![replenish_bad_response] (https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_badresp.png)
