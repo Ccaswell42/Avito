@@ -26,21 +26,10 @@ func (d *Data) Reserve(w http.ResponseWriter, r *http.Request) {
 
 	err := service.ReserveMoney(d.DB, ra)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			service.JsonResponse(service.ResponseError, w, "can't reserve money: no such user", http.StatusBadRequest)
-		} else if strings.HasPrefix(err.Error(), "pq: duplicate key value") {
-			service.JsonResponse(service.ResponseError, w, "can't reserve money: order_id must be unique", http.StatusBadRequest)
-		} else if strings.HasPrefix(err.Error(), "pq: null value in column") {
-			service.JsonResponse(service.ResponseError, w, "can't reserve money: not all request fields are specified",
-				http.StatusBadRequest)
-		} else {
-			str := err.Error()
-			service.JsonResponse(service.ResponseError, w, "can't reserve money: "+str, http.StatusInternalServerError)
-		}
-		log.Println(err)
+		ResponseErr(err, w)
 		return
 	}
-	service.JsonResponse(service.OK, w, "reserve OK", http.StatusOK)
+	service.JsonResponse(service.OK, w, "money successfully reserved", http.StatusOK)
 }
 
 func ValidateBodyReserve(r io.Reader) (reserve_account.ReverseAcc, string) {
@@ -55,4 +44,21 @@ func ValidateBodyReserve(r io.Reader) (reserve_account.ReverseAcc, string) {
 		return ra, service.ReserveZeroValue
 	}
 	return ra, service.OK
+}
+
+func ResponseErr(err error, w http.ResponseWriter) {
+	if err == sql.ErrNoRows {
+		service.JsonResponse(service.ResponseError, w, "can't reserve money: no such user", http.StatusBadRequest)
+	} else if strings.HasPrefix(err.Error(), "pq: duplicate key value") {
+		service.JsonResponse(service.ResponseError, w, "can't reserve money: order_id must be unique", http.StatusBadRequest)
+	} else if err.Error() == "not enough money" {
+		service.JsonResponse(service.ResponseError, w, "can't reserve money: not enough money", http.StatusBadRequest)
+	} else if strings.HasPrefix(err.Error(), "pq: null value in column") {
+		service.JsonResponse(service.ResponseError, w, "can't reserve money: not all request fields are specified",
+			http.StatusBadRequest)
+	} else {
+		str := err.Error()
+		service.JsonResponse(service.ResponseError, w, "can't reserve money: "+str, http.StatusInternalServerError)
+	}
+	log.Println(err)
 }

@@ -18,7 +18,7 @@ func (d *Data) Replenish(w http.ResponseWriter, r *http.Request) {
 
 	bal, errStr := ValidateReplenish(r.Body)
 	if errStr != service.OK {
-		service.JsonResponse(service.ResponseError, w, errStr, http.StatusOK)
+		service.JsonResponse(service.ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
 

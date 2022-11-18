@@ -23,7 +23,11 @@ func (d *Data) Report(w http.ResponseWriter, r *http.Request) {
 	}
 	fileName, err := service.GetReportCsv(d.DB, dateRep)
 	if err != nil {
-		service.JsonResponse(service.ResponseError, w, err.Error(), http.StatusInternalServerError)
+		if err.Error() == "no entries in the report" {
+			service.JsonResponse(service.ResponseError, w, err.Error(), http.StatusBadRequest)
+		} else {
+			service.JsonResponse(service.ResponseError, w, err.Error(), http.StatusInternalServerError)
+		}
 		log.Println(err)
 		return
 	}
