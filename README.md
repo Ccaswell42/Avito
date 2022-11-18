@@ -21,3 +21,14 @@ Response:
 ![replenish_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_resp.png)
 Response:
 ![replenish_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_badresp.png)
+## Reserve:
+Request:
+![reserve_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_req.png)
+Response:
+![reserve_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_resp.png)
+Response:
+![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp.png)
+Response:
+![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp2.png)
+Response:
+![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp3.png)
