@@ -31,7 +31,7 @@ Response:
 Response:
 ![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp2.png)
 Response:
-![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp3.png)
+![reserve_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/reserve_badresp33.png)
 ## Unreserve:
 Request:
 ![unreserve_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/unreserve_req.png)
@@ -49,7 +49,7 @@ Request:
 ![report_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_req.png)
 Response:
 ![report_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_resp.png)
-![report_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_badresp.png)
+![report_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_badresp_.png)
 ## Файл с отчетом:
 ![img](https://github.com/Ccaswell42/Avito/blob/main/screenshots/data_req.png)
 Так же по ссылке идет скачивание файла
