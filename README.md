@@ -9,8 +9,8 @@ make
 5) Revenue - метод признания выручки, списывает из резерва деньги, добавляет данные в отчет для бухгалтерии;
 6) Report - метод формирования отчета дла бухгалтерии в файле формата .csv;
 
-## Balacne:
-Requrst:
-
+## Balance:
+Request:
+![balance_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/balance_req.png)
 Response:
 
