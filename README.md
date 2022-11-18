@@ -50,3 +50,7 @@ Request:
 Response:
 ![report_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_resp.png)
 ![report_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/report_badresp.png)
+## Файл с отчетом:
+![img](https://github.com/Ccaswell42/Avito/blob/main/screenshots/data_req.png)
+Так же по ссылке идет скачивание файла
+![img](https://github.com/Ccaswell42/Avito/blob/main/screenshots/data_resp.png)
