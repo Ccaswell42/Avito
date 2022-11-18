@@ -1,9 +1,12 @@
-CONTAINERID = $(shell docker ps -a | grep avito_avito | cut -b 1-12)
 
-all:
+
+all: build
 	docker-compose up
+
+build:
+	docker-compose build
 
 serv:
 	go run main.go
-stop:
-	docker stop $(CONTAINERID)
+
+

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"avito/logic"
+	"avito/service"
 	"avito/storage/user_balance"
 	"database/sql"
 	"encoding/json"
@@ -17,23 +17,23 @@ type Data struct {
 
 func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {
 
-	errStr := logic.ValidateRequest(r, w, http.MethodGet)
-	if errStr != logic.OK {
+	errStr := service.ValidateRequest(r, w, http.MethodGet)
+	if errStr != service.OK {
 		return
 	}
 
 	bal, errStr := ValidateBodyUserBalance(r.Body)
-	if errStr != logic.OK {
-		logic.JsonResponse(logic.ResponseError, w, errStr, http.StatusBadRequest)
+	if errStr != service.OK {
+		service.JsonResponse(service.ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
 	ub, err := user_balance.GetBalance(d.DB, bal)
 	if err != nil {
-		logic.JsonResponse(logic.ResponseError, w, "no such user_id", http.StatusBadRequest)
+		service.JsonResponse(service.ResponseError, w, "no such user_id", http.StatusBadRequest)
 		log.Println(err)
 		return
 	}
-	logic.JsonResponse(logic.UB, w, ub, http.StatusOK)
+	service.JsonResponse(service.UB, w, ub, http.StatusOK)
 }
 
 func ValidateBodyUserBalance(r io.Reader) (user_balance.UserBalance, string) {
@@ -45,7 +45,7 @@ func ValidateBodyUserBalance(r io.Reader) (user_balance.UserBalance, string) {
 		return ub, err.Error()
 	}
 	if ub.Id == 0 {
-		return ub, logic.UserBalanceZeroValue
+		return ub, service.UserBalanceZeroValue
 	}
-	return ub, logic.OK
+	return ub, service.OK
 }

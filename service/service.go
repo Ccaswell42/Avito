@@ -1,4 +1,4 @@
-package logic
+package service
 
 import (
 	"avito/storage/accounting_report"

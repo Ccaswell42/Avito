@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"avito/logic"
+	"avito/service"
 	"avito/storage/accounting_report"
 	"encoding/json"
 	"io"
@@ -11,23 +11,23 @@ import (
 
 func (d *Data) Report(w http.ResponseWriter, r *http.Request) {
 
-	errStr := logic.ValidateRequest(r, w, http.MethodGet)
-	if errStr != logic.OK {
+	errStr := service.ValidateRequest(r, w, http.MethodGet)
+	if errStr != service.OK {
 		return
 	}
 
 	dateRep, errStr := ValidateBodyReport(r.Body)
-	if errStr != logic.OK {
-		logic.JsonResponse(logic.ResponseError, w, errStr, http.StatusBadRequest)
+	if errStr != service.OK {
+		service.JsonResponse(service.ResponseError, w, errStr, http.StatusBadRequest)
 		return
 	}
-	fileName, err := logic.GetReportCsv(d.DB, dateRep)
+	fileName, err := service.GetReportCsv(d.DB, dateRep)
 	if err != nil {
-		logic.JsonResponse(logic.ResponseError, w, err.Error(), http.StatusInternalServerError)
+		service.JsonResponse(service.ResponseError, w, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
 		return
 	}
-	logic.JsonResponse(logic.OK, w, "./"+fileName, http.StatusOK)
+	service.JsonResponse(service.OK, w, "./"+fileName, http.StatusOK)
 
 }
 
@@ -40,8 +40,8 @@ func ValidateBodyReport(r io.Reader) (accounting_report.DateReport, string) {
 		return dateRep, err.Error()
 	}
 	if dateRep.Year == "" || dateRep.Month == "" {
-		return dateRep, logic.ReportZeroValue
+		return dateRep, service.ReportZeroValue
 	}
 
-	return dateRep, logic.OK
+	return dateRep, service.OK
 }
