@@ -15,6 +15,9 @@ Request:
 Response:
 ![balance_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/balance_resp.png)
 ## Replenish:
-![replenish_request] (https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_req.png)
-![replenish_response] (https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_resp.png)
-![replenish_bad_response] (https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_badresp.png)
+Request:
+![replenish_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_req.png)
+Response:
+![replenish_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_resp.png)
+Response:
+![replenish_bad_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/replenish_badresp.png)
