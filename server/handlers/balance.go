@@ -4,10 +4,9 @@ import (
 	"avito/service"
 	"avito/storage/user_balance"
 	"database/sql"
-	"encoding/json"
-	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type Data struct {
@@ -17,12 +16,15 @@ type Data struct {
 
 func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {
 
-	errStr := service.ValidateRequest(r, w, http.MethodGet)
-	if errStr != service.OK {
+	if r.Method != http.MethodGet {
+		service.JsonResponse(service.ResponseError, w, service.MethodNotAllowed, http.StatusMethodNotAllowed)
 		return
 	}
 
-	bal, errStr := ValidateBodyUserBalance(r.Body)
+	id := r.FormValue("id")
+
+	bal, errStr := ValidateBodyUserBalance(id)
+
 	if errStr != service.OK {
 		service.JsonResponse(service.ResponseError, w, errStr, http.StatusBadRequest)
 		return
@@ -36,15 +38,16 @@ func (d *Data) Balance(w http.ResponseWriter, r *http.Request) {
 	service.JsonResponse(service.UB, w, ub, http.StatusOK)
 }
 
-func ValidateBodyUserBalance(r io.Reader) (user_balance.UserBalance, string) {
+func ValidateBodyUserBalance(id string) (user_balance.UserBalance, string) {
 	var ub user_balance.UserBalance
-	err := json.NewDecoder(r).Decode(&ub)
 
-	if err != nil {
-		log.Println(err)
-		return ub, err.Error()
+	if id == "" {
+		return ub, service.UserBalanceZeroValue
 	}
-	if ub.Id == 0 {
+
+	num, err := strconv.Atoi(id)
+	ub.Id = num
+	if ub.Id == 0 || err != nil {
 		return ub, service.UserBalanceZeroValue
 	}
 	return ub, service.OK
