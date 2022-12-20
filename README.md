@@ -11,7 +11,7 @@ make
 
 ## Balance:
 Request:
-![balance_request](https://github.com/Ccaswell42/Avito/blob/main/screenshots/balance_req.png)
+![balance_request](https://github.com/Ccaswell42/Balance-Service/blob/main/screenshots/get_balance_req.png)
 Response:
 ![balance_response](https://github.com/Ccaswell42/Avito/blob/main/screenshots/balance_resp.png)
 ## Replenish:
