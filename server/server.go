@@ -19,7 +19,10 @@ func LaunchServer(conf *config.Config, srv *http.Server, db *sql.DB) error {
 	mux.HandleFunc("/unreserve", d.UnReserve)
 	mux.HandleFunc("/revenue", d.Revenue)
 	mux.HandleFunc("/report", d.Report)
-	mux.Handle("/", http.FileServer(http.Dir(".")))
+	//mux.Handle("/", http.FileServer(http.Dir(".")))
+	mux.HandleFunc("/data.csv", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "data.csv")
+	})
 
 	srv.Addr = conf.Port
 	srv.Handler = mux
